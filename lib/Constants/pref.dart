@@ -18,16 +18,4 @@ class CacheHandler {
  static String? fetchItem({required String itemName}) {
     return pref!.getString(itemName);
   }
-
-
-
-  // static saveToken(String token) {
-  //   pref!.setString('TOKEN', token);
-  // }
-
-  // static String? getToken() {
-  //   return pref!.getString('TOKEN');
-  // }
-
-
 }

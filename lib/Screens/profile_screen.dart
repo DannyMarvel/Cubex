@@ -1,26 +1,19 @@
-import 'package:cubex/Constants/pref.dart';
-import 'package:cubex/Screens/registration_screen.dart';
-import 'package:dio/dio.dart';
+import 'dart:convert';
+
+import 'package:cubex/Services/api_calls_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ProfileScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final dio = Dio();
-    // final dio = useProvider(dioProvider);
-    // final token = useProvider(tokenProvider);
     final profileData = useState<Map<String, dynamic>>({});
 
     void fetchProfile() async {
       try {
-        final response = await dio.get(
-          'https://stacked.com.ng/docs#/Me/get_Profile',
-          options: Options(
-              headers: {'Authorization': 'Bearer ${CacheHandler.fetchItem(itemName: "token")}'}),
-        );
-        if (response.statusCode == 200) {
-          final profile = response.data as Map<String, dynamic>;
+        final response = await ApiCallHandler().getRequest(endPoint: 'profile', includeToken: true);
+        if (response?.statusCode == 200) {
+          final profile = jsonDecode(response!.body) as Map<String, dynamic>;
           profileData.value = profile;
         } else {
           // Handle invalid token or other errors

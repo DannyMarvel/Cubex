@@ -1,12 +1,11 @@
-
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cubex/Constants/pref.dart';
 import 'package:cubex/Screens/profile_screen.dart';
-import 'package:cubex/Screens/registration_screen.dart';
+import 'package:cubex/Services/api_calls_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:http/http.dart' as http; // Import http package
 
 class LoginScreen extends HookWidget {
   @override
@@ -14,30 +13,26 @@ class LoginScreen extends HookWidget {
     final usernameController = useTextEditingController();
     final passwordController = useTextEditingController();
 
-    void login() async {
-      try {
-        final response = await http.post(
-          Uri.parse('https://stacked.com.ng/api/login'),
-          body: {
-            'username': usernameController.text,
-            'password': passwordController.text,
-          },
-        );
-        if (response.statusCode == 200) {
-          final tokenData = json.decode(response.body) as Map<String, dynamic>;
-          log(":::::: response from login screen :::: $tokenData");
+    usernameController.text = "lorem";
+    passwordController.text = "password";
 
-          // Navigate to profile page upon successful login
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => ProfileScreen()),
-          );
-        } else {
-          // Handle login error
-          // Show error message to the user
-        }
-      } catch (e) {
-        // Handle network error
+    void login() async {
+      final response = await ApiCallHandler().postRequest(
+        endPoint: 'login',
+        body: {"username": usernameController.text, "password": passwordController.text},
+      );
+      if (response?.statusCode == 200) {
+        final tokenData = json.decode(response!.body) as Map<String, dynamic>;
+        CacheHandler.storeItem(itemName: "token", value: jsonDecode(response.body)['token']);
+        log(":::::: response from login screen :::: $tokenData");
+        // Navigate to profile page upon successful login
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ProfileScreen()),
+        );
+      } else {
+        // Handle login error
+        // Show error message to the user
       }
     }
 
@@ -68,55 +63,6 @@ class LoginScreen extends HookWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'dart:developer';
 
