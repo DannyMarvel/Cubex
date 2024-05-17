@@ -40,6 +40,7 @@ class ProfileScreen extends HookWidget {
             Text('Username: ${profileData.value['username']}'),
             Text('Email: ${profileData.value['email']}'),
             Text('Phone: ${profileData.value['phone']}'),
+            Text('Phone: ${profileData.value['phone']}'),
             // Display other profile information
           ],
         ),
