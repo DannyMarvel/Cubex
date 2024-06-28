@@ -42,6 +42,8 @@ class ProfileScreen extends HookWidget {
             Text('Phone: ${profileData.value['phone']}'),
             Text('Danny'),
             Text('Danny'),
+            Text('Danny'),
+            Text('Danny'),
           
 
             
